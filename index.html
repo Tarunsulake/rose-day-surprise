@@ -3,151 +3,209 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Valentine Surprise 💖</title>
+<title>Rose Day Surprise 🌹</title>
 
 <style>
-body {
-    margin: 0;
-    font-family: 'Comic Sans MS', cursive;
-    background: linear-gradient(135deg, #ff9a9e, #fad0c4);
-    height: 100vh;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    overflow: hidden;
+body{
+margin:0;
+font-family: 'Segoe UI', sans-serif;
+background:linear-gradient(135deg,#ff9a9e,#fad0c4);
+color:white;
+text-align:center;
+overflow-x:hidden;
 }
 
-/* Gift Box */
-.gift-box {
-    width: 200px;
-    height: 200px;
-    background: #ff4d6d;
-    position: relative;
-    cursor: pointer;
-    border-radius: 10px;
-    box-shadow: 0 0 20px rgba(0,0,0,0.3);
-    transition: transform 0.5s;
+.page{
+display:none;
+min-height:100vh;
+padding:40px;
+animation:fade 1s;
 }
 
-.gift-box:hover {
-    transform: scale(1.1);
+.active{
+display:block;
 }
 
-/* Ribbon */
-.gift-box::before {
-    content: "";
-    position: absolute;
-    width: 40px;
-    height: 200px;
-    background: white;
-    left: 80px;
+@keyframes fade{
+from{opacity:0; transform:translateY(20px);}
+to{opacity:1; transform:translateY(0);}
 }
 
-.gift-box::after {
-    content: "";
-    position: absolute;
-    height: 40px;
-    width: 200px;
-    background: white;
-    top: 80px;
+button{
+padding:12px 25px;
+border:none;
+border-radius:30px;
+background:white;
+color:#ff4d6d;
+font-size:18px;
+margin-top:20px;
+cursor:pointer;
+transition:0.3s;
 }
 
-/* Letter Card */
-.card {
-    position: absolute;
-    width: 350px;
-    padding: 25px;
-    background: white;
-    border-radius: 15px;
-    text-align: center;
-    box-shadow: 0 0 20px rgba(0,0,0,0.2);
-    display: none;
-    animation: fadeIn 1s forwards;
+button:hover{
+transform:scale(1.1);
 }
 
-@keyframes fadeIn {
-    from {opacity: 0; transform: translateY(50px);}
-    to {opacity: 1; transform: translateY(0);}
+img{
+width:250px;
+border-radius:20px;
+box-shadow:0 0 20px pink;
 }
 
-h1 {
-    color: #ff4d6d;
+.quiz button{
+display:block;
+margin:10px auto;
 }
 
-.funny {
-    font-size: 18px;
-    margin-top: 10px;
-}
-
-/* Floating hearts */
-.heart {
-    position: absolute;
-    color: red;
-    font-size: 20px;
-    animation: float 5s linear infinite;
-}
-
-@keyframes float {
-    0% { transform: translateY(0); opacity: 1;}
-    100% { transform: translateY(-600px); opacity: 0;}
+#letter{
+width:80%;
+margin:auto;
+font-size:18px;
+line-height:1.6;
+white-space:pre-line;
 }
 </style>
 </head>
 
 <body>
 
-<div class="gift-box" onclick="openGift()"></div>
+<audio autoplay loop>
+<source src="music.mp3" type="audio/mp3">
+</audio>
 
-<div class="card" id="card">
-    <h1>Happy Valentine's Day ❤️</h1>
-    <p class="funny">
-        Roses are red 🌹<br>
-        Violets are blue 💙<br>
-        I am bad at poetry 😅<br>
-        But this website is for you! 💕
-    </p>
+<!-- Page 1 -->
+<div class="page active" id="page1">
+<h1>🌹 Happy Rose Day 🌹</h1>
+<h2>I have something for you...</h2>
+<button onclick="nextPage(2)">Click Me ❤️</button>
+</div>
 
-    <p>
-        Warning ⚠️ <br>
-        You are now officially promoted to:
-        <b>Chief Happiness Officer</b> 😎
-    </p>
+<!-- Page 2 Quiz -->
+<div class="page" id="page2">
+<h2>Funny Love Quiz 😜</h2>
 
-    <button onclick="showJoke()">Click for Surprise 🤭</button>
-    <p id="joke"></p>
+<div class="quiz">
+<p>Who loves more?</p>
+<button onclick="nextPage(3)">Me 😎</button>
+<button onclick="nextPage(3)">You 😍</button>
+<button onclick="nextPage(3)">Both Obviously ❤️</button>
+</div>
+</div>
+
+<!-- Page 3 Love Calculator -->
+<div class="page" id="page3">
+<h2>Love Percentage Calculator 💘</h2>
+
+<input id="name1" placeholder="Your Name"><br><br>
+<input id="name2" placeholder="Partner Name"><br><br>
+
+<button onclick="calculateLove()">Calculate</button>
+
+<h2 id="result"></h2>
+
+<button onclick="nextPage(4)">Next ❤️</button>
+</div>
+
+<!-- Page 4 Photos -->
+<div class="page" id="page4">
+<h2>Our Memories 📸</h2>
+
+<img id="slide" src="photo1.jpg">
+
+<br>
+<button onclick="nextPage(5)">Next Surprise 🎁</button>
+</div>
+
+<!-- Page 5 Proposal -->
+<div class="page" id="page5">
+<h2>Will You Be Mine Forever? 💍</h2>
+
+<button onclick="yes()">YES ❤️</button>
+<button id="noBtn" onmouseover="moveNo()">NO 😜</button>
+</div>
+
+<!-- Page 6 Letter -->
+<div class="page" id="page6">
+<h2>Final Surprise 💌</h2>
+
+<p id="letter"></p>
 </div>
 
 <script>
-function openGift() {
-    document.querySelector(".gift-box").style.display = "none";
-    document.getElementById("card").style.display = "block";
-    createHearts();
+
+function nextPage(num){
+document.querySelectorAll(".page").forEach(p=>p.classList.remove("active"));
+document.getElementById("page"+num).classList.add("active");
 }
 
-function showJoke() {
-    const jokes = [
-        "Are you WiFi? Because I am feeling the connection 📶❤️",
-        "You must be a magician, because whenever I look at you... everyone else disappears 🎩✨",
-        "Are you a charger? Because without you, I would die 🔋😂",
-        "You stole my heart… but I will allow it 😌❤️"
-    ];
-
-    document.getElementById("joke").innerText =
-        jokes[Math.floor(Math.random() * jokes.length)];
+/* Love Calculator */
+function calculateLove(){
+let percent = Math.floor(Math.random()*21)+80;
+document.getElementById("result").innerText = percent+"% Perfect Match ❤️";
 }
 
-function createHearts() {
-    setInterval(() => {
-        const heart = document.createElement("div");
-        heart.classList.add("heart");
-        heart.innerHTML = "❤️";
-        heart.style.left = Math.random() * window.innerWidth + "px";
-        heart.style.fontSize = (Math.random() * 20 + 10) + "px";
-        document.body.appendChild(heart);
+/* Slideshow */
+let images=["photo1.jpg","photo2.jpg","photo3.jpg"];
+let i=0;
 
-        setTimeout(() => heart.remove(), 5000);
-    }, 300);
+setInterval(()=>{
+i=(i+1)%images.length;
+let slide=document.getElementById("slide");
+if(slide) slide.src=images[i];
+},3000);
+
+/* NO Button Prank */
+function moveNo(){
+let btn=document.getElementById("noBtn");
+btn.style.position="absolute";
+btn.style.top=Math.random()*80+"%";
+btn.style.left=Math.random()*80+"%";
 }
+
+/* YES */
+function yes(){
+nextPage(6);
+typeLetter();
+}
+
+/* Typing Letter */
+let text=`Ninnu choosina roju, nenu rendava saari puttina roju,
+Endukante aa roju nunchi naku nene kothaga unnaanu.
+
+Nuvvu naa jeevitham loki raaka mundu oka jeevitham,
+Nuvvu vachaka oka jeevitham.
+
+Nuvvu raakamundu naa life lo cheppukodaniki emi ledu,
+Nuvvu vachaka prathi roju, prathi nimisham oka adbhutham laga anipistundi.
+
+Idi varaku nenu goppavadini aipovalani, ekkadekkadiko vellipovalani anukunevadini.
+Kani ippudu nee tho paatu nee cheyyi pattukoni nadisthe chaalanipistundi.
+
+Prema kosam yuddhalu jarigayante navvukunevadini,
+Kani ippudu neekosam enni yuddhalaina cheyachu anipistundi.
+
+Future lo neeku entha sampadinchi pedthano cheppalenu,
+Kani ninnu santhoshapettadaniki prathi roju prayatnistanu.
+
+Ninnu amma laga chooskuntanu.
+
+Nuvve naa jeevitham...
+Nuvvu leni nannu oohinchukolenu...
+
+Ee kagitham... naa jeevitham rendu nee chethullo ne unnayi...`;
+
+let index=0;
+
+function typeLetter(){
+let letter=document.getElementById("letter");
+let interval=setInterval(()=>{
+letter.textContent += text[index];
+index++;
+if(index>=text.length) clearInterval(interval);
+},40);
+}
+
 </script>
 
 </body>
